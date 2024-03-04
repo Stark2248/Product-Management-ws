@@ -74,14 +74,15 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public ProductDto updateProduct(ProductDto productDto) {
+    public ProductDto updateProduct(String serialId ,ProductDto productDto) {
 
 
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        Optional<Products> optionalProduct=productRepository.findById(productDto.getSerialId());
+        Optional<Products> optionalProduct=productRepository.findById(serialId);
         if(optionalProduct.isPresent()){
             Products product = mapper.map(productDto,Products.class);
+            product.setSerialId(serialId);
             Products save = productRepository.save(product);
 
             return mapper.map(save,ProductDto.class);
