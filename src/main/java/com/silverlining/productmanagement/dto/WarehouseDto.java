@@ -1,14 +1,9 @@
 package com.silverlining.productmanagement.dto;
 
-public class ProductDto {
-
+public class WarehouseDto {
     String serialId;
-
     String name;
-
-    String description;
-
-    double price;
+    int quantity;
 
     public String getSerialId() {
         return serialId;
@@ -26,19 +21,11 @@ public class ProductDto {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

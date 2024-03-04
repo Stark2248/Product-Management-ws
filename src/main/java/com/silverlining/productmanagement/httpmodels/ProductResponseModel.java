@@ -1,7 +1,6 @@
-package com.silverlining.productmanagement.dto;
+package com.silverlining.productmanagement.httpmodels;
 
-public class ProductDto {
-
+public class ProductResponseModel {
     String serialId;
 
     String name;
