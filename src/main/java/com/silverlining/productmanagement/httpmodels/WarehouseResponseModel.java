@@ -5,6 +5,18 @@ public class WarehouseResponseModel {
     String name;
     int quantity;
 
+    String location;
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+
+
     public String getSerialId() {
         return serialId;
     }

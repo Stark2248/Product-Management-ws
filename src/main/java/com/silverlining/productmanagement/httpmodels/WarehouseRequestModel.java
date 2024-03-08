@@ -2,8 +2,8 @@ package com.silverlining.productmanagement.httpmodels;
 
 public class WarehouseRequestModel {
     String serialId;
-    String name;
     int quantity;
+    String location;
 
     public String getSerialId() {
         return serialId;
@@ -13,12 +13,12 @@ public class WarehouseRequestModel {
         this.serialId = serialId;
     }
 
-    public String getName() {
-        return name;
+    public String getLocation() {
+        return location;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public int getQuantity() {

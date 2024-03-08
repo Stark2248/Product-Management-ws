@@ -7,18 +7,45 @@ import jakarta.persistence.*;
 @Table(name = "Warehouse")
 public class Warehouse {
 
-    @OneToOne(mappedBy = "Products", cascade = CascadeType.ALL)
-    private String serialId;
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+
+    @ManyToOne
+    @JoinColumn(name = "serialId", referencedColumnName = "serialId")
+    private Products product;
 
     @Column(nullable = false)
     private int quantity;
 
-    public String getSerialId() {
-        return serialId;
+
+    @Column(name = "location")
+    private String location;
+
+    public String getLocation() {
+        return location;
     }
 
-    public void setSerialId(String serialId) {
-        this.serialId = serialId;
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Products getProduct() {
+        return product;
+    }
+
+    public void setProduct(Products product) {
+        this.product = product;
     }
 
     public int getQuantity() {
