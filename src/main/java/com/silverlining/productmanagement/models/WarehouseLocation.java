@@ -20,19 +20,18 @@ public enum WarehouseLocation {
         this.abbreviation = abbreviation;
     }
 
-    public String getAbbreviation() {
-        return abbreviation;
-    }
-
-
-    public static WarehouseLocation findByName(String name){
-        WarehouseLocation result=null;
-        for(WarehouseLocation location : values()){
-            if(Objects.equals(name, location.getAbbreviation()) || Objects.equals(name, location.name())){
+    public static WarehouseLocation findByName(String name) {
+        WarehouseLocation result = null;
+        for (WarehouseLocation location : values()) {
+            if (Objects.equals(name, location.getAbbreviation()) || Objects.equals(name, location.name())) {
                 result = location;
                 break;
             }
         }
         return result;
+    }
+
+    public String getAbbreviation() {
+        return abbreviation;
     }
 }

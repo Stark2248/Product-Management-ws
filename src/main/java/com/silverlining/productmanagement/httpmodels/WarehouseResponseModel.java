@@ -16,7 +16,6 @@ public class WarehouseResponseModel {
     }
 
 
-
     public String getSerialId() {
         return serialId;
     }

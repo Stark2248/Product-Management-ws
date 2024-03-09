@@ -8,7 +8,6 @@ import jakarta.persistence.*;
 public class Warehouse {
 
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -23,6 +22,14 @@ public class Warehouse {
 
     @Column(name = "location")
     private String location;
+
+    public Warehouse(){}
+
+    public Warehouse(Products product, int quantity, String location) {
+        this.product = product;
+        this.quantity = quantity;
+        this.location = location;
+    }
 
     public String getLocation() {
         return location;

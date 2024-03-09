@@ -21,5 +21,4 @@ public interface WarehouseService {
     WarehouseDto deleteProductStock(String serialId, String location);
 
 
-
 }
