@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
+
 
 @RestController
 @RequestMapping("/warehouse")
@@ -84,7 +84,7 @@ public class WarehouseController {
 
         WarehouseDto warehouseDto = warehouseService.createProductStock(dto);
 
-        if (Objects.equals(warehouseDto.getName(), "Already Exist")) {
+        if (warehouseDto == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 

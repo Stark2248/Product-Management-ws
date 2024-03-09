@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,6 +20,7 @@ import java.util.Optional;
 @Component
 public class WarehouseServiceImpl implements WarehouseService {
 
+    public static final String WRONG_LOCATION = "Wrong Location!!";
     private final WarehouseRepository warehouseRepository;
 
     private final ProductRepository productRepository;
@@ -49,7 +51,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     @Override
     public List<WarehouseDto> getProductStockByLocation(String location) {
         List<Warehouse> listWarehouseByLocation = warehouseRepository.findByLocation(WarehouseLocation.findByName(location).name());
-        if (listWarehouseByLocation != null) {
+        if (!CollectionUtils.isEmpty(listWarehouseByLocation)) {
             List<WarehouseDto> listDto = new ArrayList<>();
             for (Warehouse warehouse : listWarehouseByLocation) {
                 WarehouseDto dto = new WarehouseDto();
@@ -69,7 +71,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         WarehouseLocation loc = WarehouseLocation.findByName(location);
         if (loc == null) {
             WarehouseDto dto = new WarehouseDto();
-            dto.setName("Wrong Location!!");
+            dto.setName(WRONG_LOCATION);
             return dto;
         }
         Optional<Products> productOptional = productRepository.findById(serialId);
@@ -99,8 +101,8 @@ public class WarehouseServiceImpl implements WarehouseService {
 
         WarehouseDto dto1 = getProductAvailability(warehouseDto.getSerialId(), WarehouseLocation.findByName(warehouseDto.getLocation()).name());
         if (dto1 != null) {
-            dto1.setName("Already Exist");
-            return dto1;
+
+            return null;
         }
 
         Optional<Products> productopt = productRepository.findById(warehouseDto.getSerialId());

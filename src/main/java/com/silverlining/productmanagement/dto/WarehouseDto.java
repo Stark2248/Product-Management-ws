@@ -1,6 +1,11 @@
 package com.silverlining.productmanagement.dto;
 
 public class WarehouseDto {
+
+
+
+
+
     String serialId;
     String name;
     int quantity;
@@ -15,6 +20,8 @@ public class WarehouseDto {
         this.quantity = quantity;
         this.location = location;
     }
+
+
 
     public String getLocation() {
         return location;
