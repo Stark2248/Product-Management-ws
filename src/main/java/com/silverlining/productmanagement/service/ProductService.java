@@ -10,14 +10,13 @@ public interface ProductService {
 
     List<ProductDto> getAllProducts();
 
-    ProductDto getProductById(String serialID );
+    ProductDto getProductById(String serialID);
 
     ProductDto createProduct(ProductDto productDto);
 
-    ProductDto updateProduct(ProductDto productDto);
+    ProductDto updateProduct(String serialId, ProductDto productDto);
 
     ProductDto deleteProductById(String serialId);
-
 
 
 }

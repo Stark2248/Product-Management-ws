@@ -5,6 +5,25 @@ public class WarehouseDto {
     String name;
     int quantity;
 
+    String location;
+
+    public WarehouseDto(){}
+
+    public WarehouseDto(String serialId, String name, int quantity, String location) {
+        this.serialId = serialId;
+        this.name = name;
+        this.quantity = quantity;
+        this.location = location;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
     public String getSerialId() {
         return serialId;
     }
