@@ -1,23 +1,12 @@
-package com.silverlining.productmanagement.models;
+package com.silverlining.productmanagement.httpmodels;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
-@Entity
-@Table(name = "Product")
-public class Products {
-    @Id
+public class ProductRequestModel {
     String serialId;
 
-    @Column(nullable = false, length = 100)
     String name;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
     String description;
 
-    @Column(nullable = false)
     double price;
 
     public String getSerialId() {
