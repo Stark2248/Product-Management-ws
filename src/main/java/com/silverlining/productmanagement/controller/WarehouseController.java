@@ -70,7 +70,7 @@ public class WarehouseController {
         return ResponseEntity.status(HttpStatus.FOUND).body(responseModelList);
     }
 
-    @GetMapping("/{location}")
+    @GetMapping("/locations/{location}")
     public ResponseEntity<List<WarehouseResponseModel>> getProductAvailabilityByLocation(@PathVariable(name = "location") String location) {
         List<WarehouseDto> warehouseDtoList = warehouseService.getProductStockByLocation(location);
         if (warehouseDtoList.isEmpty()) {

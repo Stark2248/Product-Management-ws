@@ -55,7 +55,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     private List<WarehouseDto> getWarehouseDtoList(String serialId, Products product) {
-        List<Warehouse> warehouseList = warehouseRepository.findBySerialId(product);
+        List<Warehouse> warehouseList = warehouseRepository.findBySerialId(serialId);
         List<WarehouseDto> dtoList = new ArrayList<>();
         for(Warehouse warehouse : warehouseList){
             WarehouseDto dto = new WarehouseDto(serialId, product.getName(),warehouse.getQuantity(),warehouse.getLocation());
@@ -87,6 +87,7 @@ public class WarehouseServiceImpl implements WarehouseService {
             List<WarehouseDto> listDto = new ArrayList<>();
             for (Warehouse warehouse : listWarehouseByLocation) {
                 WarehouseDto dto = new WarehouseDto();
+                dto.setSerialId(warehouse.getProduct().getSerialId());
                 dto.setName(warehouse.getProduct().getName());
                 dto.setLocation(warehouse.getLocation());
                 dto.setQuantity(warehouse.getQuantity());
@@ -181,6 +182,7 @@ public class WarehouseServiceImpl implements WarehouseService {
                 dto.setName(optionalProduct.get().getName());
                 dto.setQuantity(ware.getQuantity());
                 dto.setSerialId(serialId);
+                dto.setLocation(WarehouseLocation.findByName(location).name());
 
 
                 return dto;

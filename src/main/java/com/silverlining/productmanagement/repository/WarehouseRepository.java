@@ -15,7 +15,8 @@ import java.util.List;
 public interface WarehouseRepository extends JpaRepository<Warehouse,Integer> {
 
 
-    List<Warehouse> findBySerialId(Products product);
+    @Query("SELECT w FROM Warehouse w WHERE w.product.serialId = :serialId")
+    List<Warehouse> findBySerialId(@Param("serialId") String serialId);
 
 
     List<Warehouse> findByLocation(String location);
