@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -48,53 +47,39 @@ public class WarehouseServiceImpl implements WarehouseService {
         }).orElse(-1);
     }
 
+    private static WarehouseDto getDto(Warehouse warehouse) {
+        WarehouseDto dto = new WarehouseDto();
+        dto.setSerialId(warehouse.getProduct().getSerialId());
+        dto.setName(warehouse.getProduct().getName());
+        dto.setLocation(warehouse.getLocation());
+        dto.setQuantity(warehouse.getQuantity());
+        return dto;
+    }
+
     @Override
     public List<WarehouseDto> getProductStock(String serialId) {
         Optional<Products> optionalProduct = productRepository.findById(serialId);
-        return optionalProduct.map(product ->getWarehouseDtoList(serialId, product)).orElse(Collections.emptyList());
+        return optionalProduct.map(product -> getWarehouseDtoList(serialId)).orElse(Collections.emptyList());
     }
 
-    private List<WarehouseDto> getWarehouseDtoList(String serialId, Products product) {
+    private List<WarehouseDto> getWarehouseDtoList(String serialId) {
         List<Warehouse> warehouseList = warehouseRepository.findBySerialId(serialId);
-        List<WarehouseDto> dtoList = new ArrayList<>();
-        for(Warehouse warehouse : warehouseList){
-            WarehouseDto dto = new WarehouseDto(serialId, product.getName(),warehouse.getQuantity(),warehouse.getLocation());
-            dtoList.add(dto);
-        }
-        return dtoList;
+
+        return warehouseList.stream().map(WarehouseServiceImpl::getDto).toList();
+
     }
 
     @Override
     public List<WarehouseDto> getAllProductStock() {
         List<Warehouse> warehouseList = warehouseRepository.findAll();
-        List<WarehouseDto> dtoList = new ArrayList<>();
-        for (Warehouse warehouse : warehouseList) {
-            WarehouseDto dto = new WarehouseDto();
-            dto.setSerialId(warehouse.getProduct().getSerialId());
-            dto.setLocation(warehouse.getLocation());
-            dto.setQuantity(warehouse.getQuantity());
-            dto.setName(warehouse.getProduct().getName());
-            dtoList.add(dto);
-
-        }
-        return dtoList;
+        return warehouseList.stream().map(WarehouseServiceImpl::getDto).toList();
     }
 
     @Override
     public List<WarehouseDto> getProductStockByLocation(String location) {
         List<Warehouse> listWarehouseByLocation = warehouseRepository.findByLocation(WarehouseLocation.findByName(location).name());
         if (!CollectionUtils.isEmpty(listWarehouseByLocation)) {
-            List<WarehouseDto> listDto = new ArrayList<>();
-            for (Warehouse warehouse : listWarehouseByLocation) {
-                WarehouseDto dto = new WarehouseDto();
-                dto.setSerialId(warehouse.getProduct().getSerialId());
-                dto.setName(warehouse.getProduct().getName());
-                dto.setLocation(warehouse.getLocation());
-                dto.setQuantity(warehouse.getQuantity());
-                listDto.add(dto);
-
-            }
-            return listDto;
+            return listWarehouseByLocation.stream().map(WarehouseServiceImpl::getDto).toList();
         }
         return Collections.emptyList();
     }
@@ -136,9 +121,9 @@ public class WarehouseServiceImpl implements WarehouseService {
             return null;
         }
 
-        Optional<Products> productopt = productRepository.findById(warehouseDto.getSerialId());
-        if (productopt.isPresent()) {
-            Products product = productopt.get();
+        Optional<Products> optionalProducts = productRepository.findById(warehouseDto.getSerialId());
+        if (optionalProducts.isPresent()) {
+            Products product = optionalProducts.get();
             ModelMapper mapper = new ModelMapper();
             mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
             Warehouse warehouse = mapper.map(warehouseDto, Warehouse.class);
