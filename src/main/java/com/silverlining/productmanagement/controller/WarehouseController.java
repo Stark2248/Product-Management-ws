@@ -27,6 +27,33 @@ public class WarehouseController {
         this.warehouseService = warehouseService;
     }
 
+    @GetMapping("/stock/{location}/{id}")
+    public ResponseEntity<Integer> getProductQuantity(@PathVariable(name = "id") String id, @PathVariable(name = "location") String location){
+        int quantity = warehouseService.getQuantityBySerialIdAndLocation(id, location);
+        if(quantity == -1){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(quantity);
+        }else{
+            return ResponseEntity.status(HttpStatus.FOUND).body(quantity);
+        }
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<List<WarehouseResponseModel>> getProductById(@PathVariable(name = "id") String id){
+        List<WarehouseDto> dtoList = warehouseService.getProductStock(id);
+        List<WarehouseResponseModel> responseModelList = new ArrayList<>();
+        if(dtoList.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList());
+        }
+        for(WarehouseDto dto : dtoList){
+            WarehouseResponseModel responseModel = new WarehouseResponseModel();
+            responseModel.setName(dto.getName());
+            responseModel.setQuantity(dto.getQuantity());
+            responseModel.setLocation(dto.getLocation());
+            responseModel.setSerialId(dto.getSerialId());
+            responseModelList.add(responseModel);
+        }
+        return ResponseEntity.status(HttpStatus.FOUND).body(responseModelList);
+    }
+
     @GetMapping("/stocks")
     public ResponseEntity<List<WarehouseResponseModel>> getAllProductStocks() {
         List<WarehouseDto> dtoList = warehouseService.getAllProductStock();

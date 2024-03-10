@@ -20,7 +20,6 @@ import java.util.Optional;
 @Component
 public class WarehouseServiceImpl implements WarehouseService {
 
-    public static final String WRONG_LOCATION = "Wrong Location!!";
     private final WarehouseRepository warehouseRepository;
 
     private final ProductRepository productRepository;
@@ -31,6 +30,39 @@ public class WarehouseServiceImpl implements WarehouseService {
         this.productRepository = productRepository;
     }
 
+
+    @Override
+    public int getQuantityBySerialIdAndLocation(String serialId, String location) {
+        WarehouseLocation loc = WarehouseLocation.findByName(location);
+        if (loc == null) {
+            return -1;
+        }
+        Optional<Products> productOptional = productRepository.findById(serialId);
+
+        return productOptional.map(product -> {
+            WarehouseDto dto = getWarehouseDto(product, loc);
+            if(dto == null){
+                return -1;
+            }
+            return dto.getQuantity();
+        }).orElse(-1);
+    }
+
+    @Override
+    public List<WarehouseDto> getProductStock(String serialId) {
+        Optional<Products> optionalProduct = productRepository.findById(serialId);
+        return optionalProduct.map(product ->getWarehouseDtoList(serialId, product)).orElse(Collections.emptyList());
+    }
+
+    private List<WarehouseDto> getWarehouseDtoList(String serialId, Products product) {
+        List<Warehouse> warehouseList = warehouseRepository.findBySerialId(product);
+        List<WarehouseDto> dtoList = new ArrayList<>();
+        for(Warehouse warehouse : warehouseList){
+            WarehouseDto dto = new WarehouseDto(serialId, product.getName(),warehouse.getQuantity(),warehouse.getLocation());
+            dtoList.add(dto);
+        }
+        return dtoList;
+    }
 
     @Override
     public List<WarehouseDto> getAllProductStock() {
@@ -70,30 +102,28 @@ public class WarehouseServiceImpl implements WarehouseService {
     public WarehouseDto getProductAvailability(String serialId, String location) {
         WarehouseLocation loc = WarehouseLocation.findByName(location);
         if (loc == null) {
-            WarehouseDto dto = new WarehouseDto();
-            dto.setName(WRONG_LOCATION);
-            return dto;
+            return null;
         }
         Optional<Products> productOptional = productRepository.findById(serialId);
-        if (productOptional.isPresent()) {
-            Products product = productOptional.get();
 
-            Warehouse warehouse = warehouseRepository.findBySerialIdAndLocation(product.getSerialId(), loc.name());
-            if (warehouse == null) {
-                return null;
-            }
+        return productOptional.map(product -> getWarehouseDto(product, loc))
+                              .orElse(null);
+    }
 
-            WarehouseDto warehouseDto = new WarehouseDto();
-
-
-            warehouseDto.setSerialId(warehouse.getProduct().getSerialId());
-            warehouseDto.setQuantity(warehouse.getQuantity());
-            warehouseDto.setName(product.getName());
-            warehouseDto.setLocation(warehouse.getLocation());
-
-            return warehouseDto;
+    private WarehouseDto getWarehouseDto(Products product, WarehouseLocation loc) {
+        Warehouse warehouse = warehouseRepository.findBySerialIdAndLocation(product.getSerialId(), loc.name());
+        if (warehouse == null) {
+            return null;
         }
-        return null;
+
+        WarehouseDto warehouseDto = new WarehouseDto();
+
+
+        warehouseDto.setSerialId(warehouse.getProduct().getSerialId());
+        warehouseDto.setQuantity(warehouse.getQuantity());
+        warehouseDto.setName(product.getName());
+        warehouseDto.setLocation(warehouse.getLocation());
+        return warehouseDto;
     }
 
     @Override

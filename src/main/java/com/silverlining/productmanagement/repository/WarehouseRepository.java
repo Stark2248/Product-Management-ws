@@ -1,5 +1,6 @@
 package com.silverlining.productmanagement.repository;
 
+import com.silverlining.productmanagement.models.Products;
 import com.silverlining.productmanagement.models.Warehouse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -13,6 +14,8 @@ import java.util.List;
 @Repository
 public interface WarehouseRepository extends JpaRepository<Warehouse,Integer> {
 
+
+    List<Warehouse> findBySerialId(Products product);
 
 
     List<Warehouse> findByLocation(String location);

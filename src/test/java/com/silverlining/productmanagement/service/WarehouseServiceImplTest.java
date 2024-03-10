@@ -5,6 +5,7 @@ import com.silverlining.productmanagement.models.Products;
 import com.silverlining.productmanagement.models.Warehouse;
 import com.silverlining.productmanagement.repository.ProductRepository;
 import com.silverlining.productmanagement.repository.WarehouseRepository;
+import net.bytebuddy.dynamic.DynamicType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -194,6 +195,62 @@ class WarehouseServiceImplTest {
         Assertions.assertEquals("Id1", dto.getSerialId());
         Assertions.assertEquals("P1", dto.getName());
         Assertions.assertEquals(15,dto.getQuantity());
+
+    }
+
+    @Test
+    void getQuantityBySerialIdAndLocation() {
+        Products product = new Products();
+        product.setSerialId("Id1");
+        product.setName("P1");
+        product.setDescription("P1");
+        product.setPrice(100);
+
+        Warehouse warehouse= new Warehouse(product, 15,"BANGALORE");
+        Mockito.when(warehouseRepository.findBySerialIdAndLocation("Id1","BANGALORE")).thenReturn(warehouse);
+
+        Optional<Products> optionalProduct = Optional.of(product);
+        Mockito.when(productRepository.findById("Id1")).thenReturn(optionalProduct);
+
+        int quantity = service.getQuantityBySerialIdAndLocation("Id1","BANGALORE");
+        Assertions.assertEquals(15,quantity);
+
+        quantity = service.getQuantityBySerialIdAndLocation("Id2","BANGALORE");
+        Assertions.assertEquals(-1,quantity);
+
+        quantity = service.getQuantityBySerialIdAndLocation("Id3","BANGALORE");
+        Assertions.assertEquals(-1,quantity);
+
+    }
+
+    @Test
+    void getProductStock() {
+
+        Products product = new Products();
+        product.setSerialId("Id1");
+        product.setName("P1");
+        product.setDescription("P1");
+        product.setPrice(100);
+
+        Warehouse warehouse= new Warehouse(product, 15,"BANGALORE");
+        List<Warehouse> warehouseList = new ArrayList<>();
+        warehouseList.add(warehouse);
+        warehouse = new Warehouse(product, 20,"MUMBAI");
+        warehouseList.add(warehouse);
+
+        Mockito.when(warehouseRepository.findBySerialId(product)).thenReturn(warehouseList);
+
+        Optional<Products> optionalProduct = Optional.of(product);
+        Mockito.when(productRepository.findById("Id1")).thenReturn(optionalProduct);
+
+        List<WarehouseDto> dtoList = service.getProductStock("Id1");
+
+        Assertions.assertNotNull(dtoList);
+        Assertions.assertEquals(2,dtoList.size());
+
+
+
+
 
     }
 }
