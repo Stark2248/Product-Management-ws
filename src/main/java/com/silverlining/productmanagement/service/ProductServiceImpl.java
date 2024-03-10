@@ -27,9 +27,9 @@ public class ProductServiceImpl implements ProductService {
         List<ProductDto> retList = new ArrayList<>();
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        for (Products a : productRepository.findAll()) {
-            ProductDto p = mapper.map(a, ProductDto.class);
-            retList.add(p);
+        for (Products product : productRepository.findAll()) {
+            ProductDto dto = mapper.map(product, ProductDto.class);
+            retList.add(dto);
         }
         if (retList.isEmpty())
             return Collections.emptyList();

@@ -1,5 +1,6 @@
 package com.silverlining.productmanagement.repository;
 
+import com.silverlining.productmanagement.models.Products;
 import com.silverlining.productmanagement.models.Warehouse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -13,6 +14,9 @@ import java.util.List;
 @Repository
 public interface WarehouseRepository extends JpaRepository<Warehouse,Integer> {
 
+
+    @Query("SELECT w FROM Warehouse w WHERE w.product.serialId = :serialId")
+    List<Warehouse> findBySerialId(@Param("serialId") String serialId);
 
 
     List<Warehouse> findByLocation(String location);
