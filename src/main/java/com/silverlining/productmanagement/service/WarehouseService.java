@@ -8,6 +8,8 @@ import java.util.List;
 @Service
 public interface WarehouseService {
 
+    //List<WarehouseDto> getProductStocks(List<String> serialId);
+
     int getQuantityBySerialIdAndLocation(String serialId, String location);
 
     List<WarehouseDto> getProductStock(String serialId);

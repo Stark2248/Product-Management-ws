@@ -70,6 +70,15 @@ public class WarehouseController {
         return ResponseEntity.status(HttpStatus.FOUND).body(responseModelList);
     }
 
+//    @PostMapping("/stocks/availability")
+//    public ResponseEntity<List<WarehouseResponseModel>> getProductsAvailability(@RequestBody List<String> serialIds){
+//        List<WarehouseDto> dtoList = warehouseService.getProductStocks(serialIds);
+//        if(dtoList.isEmpty())
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+//        List<WarehouseResponseModel> responseModelList = new ArrayList<>();
+//
+//    }
+
     @GetMapping("/locations/{location}")
     public ResponseEntity<List<WarehouseResponseModel>> getProductAvailabilityByLocation(@PathVariable(name = "location") String location) {
         List<WarehouseDto> warehouseDtoList = warehouseService.getProductStockByLocation(location);

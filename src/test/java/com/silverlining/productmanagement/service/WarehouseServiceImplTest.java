@@ -238,7 +238,7 @@ class WarehouseServiceImplTest {
         warehouse = new Warehouse(product, 20,"MUMBAI");
         warehouseList.add(warehouse);
 
-        Mockito.when(warehouseRepository.findBySerialId(product)).thenReturn(warehouseList);
+        Mockito.when(warehouseRepository.findBySerialId("Id1")).thenReturn(warehouseList);
 
         Optional<Products> optionalProduct = Optional.of(product);
         Mockito.when(productRepository.findById("Id1")).thenReturn(optionalProduct);

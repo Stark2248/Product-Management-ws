@@ -99,4 +99,21 @@ public class ProductServiceImpl implements ProductService {
         }
         return null;
     }
+
+    @Override
+    public List<ProductDto> getProductsByIds(List<String> serialIds) {
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        List<ProductDto> dtoList = new ArrayList<>();
+        for(String serial : serialIds){
+            Optional<Products> optionalProduct = productRepository.findById(serial);
+            boolean flag=optionalProduct.map(product -> {
+                dtoList.add(mapper.map(product,ProductDto.class));
+                return true;
+            }).orElse( false);
+            if(!flag)
+                return Collections.emptyList();
+        }
+        return dtoList;
+    }
 }

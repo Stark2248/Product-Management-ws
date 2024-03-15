@@ -18,5 +18,7 @@ public interface ProductService {
 
     ProductDto deleteProductById(String serialId);
 
+    List<ProductDto> getProductsByIds(List<String> serialIds);
+
 
 }

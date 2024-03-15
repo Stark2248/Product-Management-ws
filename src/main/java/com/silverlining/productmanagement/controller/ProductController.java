@@ -8,10 +8,13 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -29,7 +32,7 @@ public class ProductController {
     public ResponseEntity<List<ProductResponseModel>> getAllProducts(){
         List<ProductDto> list = productService.getAllProducts();
         if(list == null){
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(Collections.emptyList());
         }
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
@@ -39,6 +42,22 @@ public class ProductController {
             retlist.add(responseModel);
         });
         return ResponseEntity.status(HttpStatus.OK).body(retlist);
+    }
+
+    @PostMapping(value = "/all", consumes ={MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<ProductResponseModel>> getProductsByIds(@RequestBody List<String> serialIds){
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        List<ProductDto> dtoList = productService.getProductsByIds(serialIds);
+        if(dtoList.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(Collections.emptyList());
+        }
+        List<ProductResponseModel> responseModelList = new ArrayList<>();
+        for(ProductDto dto : dtoList){
+            ProductResponseModel responseModel = mapper.map(dto,ProductResponseModel.class);
+            responseModelList.add(responseModel);
+        }
+        return ResponseEntity.status(HttpStatus.FOUND).body(responseModelList);
     }
 
     @GetMapping("/{id}")
