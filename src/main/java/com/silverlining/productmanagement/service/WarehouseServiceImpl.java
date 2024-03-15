@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +30,16 @@ public class WarehouseServiceImpl implements WarehouseService {
         this.productRepository = productRepository;
     }
 
+
+//    @Override
+//    public List<WarehouseDto> getProductStocks(List<String> serialId) {
+//        List<WarehouseDto> dtoList = new ArrayList<>();
+//        serialId.stream().forEach(serial ->{
+//            List<WarehouseDto> productdtos = this.getProductStock(serial);
+//            dtoList.addAll(productdtos);
+//        });
+//        return dtoList;
+//    }
 
     @Override
     public int getQuantityBySerialIdAndLocation(String serialId, String location) {
